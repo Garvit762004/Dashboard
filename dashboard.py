@@ -1,16 +1,20 @@
 import streamlit as st
 import pandas as pd
+from streamlit_autorefresh import st_autorefresh
 
 # Load data from published Google Sheets CSV
 DATA_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbuUeZzFreMO2mh_MkO3IBJw9ykOngNWyLSqFRcYRYBnacaD-3_IN8y-6ASatD-gpZzcTHfPw2VTp/pub?output=csv'
 
-@st.cache_data
+# Load Data Function without Cache to ensure live updates
 def load_data():
     df = pd.read_csv(DATA_URL)
     df['Application Status'] = df['Application Status'].astype(str)  # Ensure it's treated as string
     return df
 
 def main():
+    # Auto-refresh every 10 seconds
+    st_autorefresh(interval=10000, key="datarefresh")
+
     st.title("Recruitment Dashboard 📊")
 
     # Load Data
